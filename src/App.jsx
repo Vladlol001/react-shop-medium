@@ -1,51 +1,110 @@
-import React from 'react';
-import Header from './layout/Header/Header';
-import Footer from './layout/Footer/Footer';
-import Main from './layout/Main/Main';
-const API_KEY = process.env.REACT_APP_API_KEY;
+import React, { useState } from 'react';
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
+import Footer from './components/Footer/Footer';
+import BucketList from './components/BucketList/BucketList';
+import Alert from './components/common/Alert';
 
-class App extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            movies: [],
-            isLoading: false,
-        };
-    }
+export default function App() {
+    const [bucket, setBucket] = useState([]);
+    const [isBacketShow, setBacketShow] = useState(false);
+    const [alertName, setAlertName] = useState('');
 
-    movieUpdate = (newMovie, type = 'all') => {
-        this.setState({ isLoading: true });
-        const url = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${newMovie}${
-            type !== 'all' ? `&type=${type}` : ''
-        }`;
-        fetch(url)
-            .then((response) => response.json())
-            .then((commits) =>
-                this.setState({ movies: commits.Search, isLoading: false })
-            )
-            .catch((err) => console.log(err));
+    const closeAlert = () => {
+        setAlertName('');
     };
 
-    componentDidMount() {
-        const url = `https://www.omdbapi.com/?apikey=${API_KEY}`;
-        fetch(url)
-            .then((response) => response.json())
-            .then((commits) => this.setState({ movies: commits.Search }))
-            .catch((err) => console.log(err));
-    }
+    const handleBacketShow = () => {
+        setBacketShow(!isBacketShow);
+    };
 
-    render() {
-        return (
-            <>
-                <Header />
-                <Main
-                    movies={this.state.movies}
-                    movieUpdate={this.movieUpdate}
-                />
-                <Footer />
-            </>
+    const addQuantity = (id) => {
+        let newState = bucket.find((item) => item.id === id);
+        if (newState) {
+            newState = {
+                id: newState.id,
+                name: newState.name,
+                price: newState.price,
+                quantity: newState.quantity + 1,
+            };
+            setBucket(() => {
+                let changeState = bucket.map((item) => {
+                    if (item.id === newState.id) return (item = newState);
+                    return item;
+                });
+                return changeState;
+            });
+        }
+    };
+
+    const removeQuantity = (id) => {
+        let newState = bucket.find((item) => item.id === id);
+        if (newState && newState.quantity > 1) {
+            newState = {
+                id: newState.id,
+                name: newState.name,
+                price: newState.price,
+                quantity: newState.quantity - 1,
+            };
+            setBucket(() => {
+                let changeState = bucket.map((item) => {
+                    if (item.id === newState.id) return (item = newState);
+                    return item;
+                });
+                return changeState;
+            });
+        }
+    };
+
+    const removeFromBucket = (id) => {
+        setBucket(() => {
+            let newState = bucket.filter((item) => item.id !== id);
+            setBucket(newState);
+        });
+    };
+
+    const addToBucket = (item) => {
+        const itemIndex = bucket.findIndex(
+            (bucketItem) => bucketItem.id === item.id
         );
-    }
-}
 
-export default App;
+        if (itemIndex < 0) {
+            const newItem = {
+                ...item,
+                quantity: 1,
+            };
+            setBucket([...bucket, newItem]);
+        } else {
+            const newBucket = bucket.map((bucketItem, index) => {
+                if (index === itemIndex) {
+                    return {
+                        ...bucketItem,
+                        quantity: bucketItem.quantity + 1,
+                    };
+                } else {
+                    return bucketItem;
+                }
+            });
+            setBucket(newBucket);
+        }
+        setAlertName(item.name);
+    };
+
+    return (
+        <>
+            {alertName && <Alert name={alertName} closeAlert={closeAlert} />}
+            {isBacketShow && (
+                <BucketList
+                    bucket={bucket}
+                    handleBacketShow={handleBacketShow}
+                    removeFromBucket={removeFromBucket}
+                    addQuantity={addQuantity}
+                    removeQuantity={removeQuantity}
+                />
+            )}
+            <Header bucket={bucket} handleBacketShow={handleBacketShow} />
+            <Main bucket={bucket} addToBucket={addToBucket} />
+            <Footer />
+        </>
+    );
+}
