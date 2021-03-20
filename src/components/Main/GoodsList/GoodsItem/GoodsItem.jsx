@@ -1,4 +1,5 @@
-function GoodsItem({ goods, addToBucket }) {
+function GoodsItem({ goods, addToBucket, bucket = [] }) {
+    let goToTheBucket = 0;
     return (
         <div className="card">
             <div className="card__photo">
@@ -20,11 +21,22 @@ function GoodsItem({ goods, addToBucket }) {
                             id: goods.mainId,
                             name: goods.granted[0].name,
                             price: goods.price.finalPrice,
+                            isInTheBucket: true,
                         });
                     }}
                     className="card__btn"
                 >
-                    Buy
+                    {bucket.forEach((item) => {
+                        if (item.id === goods.mainId) {
+                            goToTheBucket++;
+                        }
+                        return item;
+                    })}
+                    {goToTheBucket ? (
+                        <span>Go to the bucket</span>
+                    ) : (
+                        <span>Buy</span>
+                    )}
                 </button>
                 <span>{goods.price.finalPrice} $</span>
             </div>

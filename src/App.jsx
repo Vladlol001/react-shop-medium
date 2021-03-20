@@ -26,6 +26,7 @@ export default function App() {
                 name: newState.name,
                 price: newState.price,
                 quantity: newState.quantity + 1,
+                isInTheBucket: newState.isInTheBucket,
             };
             setBucket(() => {
                 let changeState = bucket.map((item) => {
@@ -74,20 +75,10 @@ export default function App() {
                 quantity: 1,
             };
             setBucket([...bucket, newItem]);
+            setAlertName(item.name);
         } else {
-            const newBucket = bucket.map((bucketItem, index) => {
-                if (index === itemIndex) {
-                    return {
-                        ...bucketItem,
-                        quantity: bucketItem.quantity + 1,
-                    };
-                } else {
-                    return bucketItem;
-                }
-            });
-            setBucket(newBucket);
+            handleBacketShow();
         }
-        setAlertName(item.name);
     };
 
     return (

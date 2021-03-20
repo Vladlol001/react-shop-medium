@@ -12,32 +12,34 @@ function BucketList({
     }, 0);
 
     return (
-        <div className="bucket__container">
-            <ul className="bucket__list">
-                <div className="close__bucket" onClick={handleBacketShow}>
-                    <i className="fas fa-times"></i>
-                </div>
-                <li className="bucket__name">Bucket</li>
-                {bucket.length ? (
-                    bucket.map((item) => (
-                        <BucketItem
-                            removeFromBucket={removeFromBucket}
-                            removeQuantity={removeQuantity}
-                            addQuantity={addQuantity}
-                            key={item.id}
-                            {...item}
-                        />
-                    ))
-                ) : (
-                    <li className="bucket__item">
-                        <span>Bucket is empty</span>
+        <div className="bucket__window">
+            <div className="bucket__container">
+                <ul className="bucket__list">
+                    <div className="close__bucket" onClick={handleBacketShow}>
+                        <i className="fas fa-times"></i>
+                    </div>
+                    <li className="bucket__name">Bucket</li>
+                    {bucket.length ? (
+                        bucket.map((item) => (
+                            <BucketItem
+                                removeFromBucket={removeFromBucket}
+                                removeQuantity={removeQuantity}
+                                addQuantity={addQuantity}
+                                key={item.id}
+                                {...item}
+                            />
+                        ))
+                    ) : (
+                        <li className="bucket__item">
+                            <span>Bucket is empty</span>
+                        </li>
+                    )}
+                    <li className="bucket__price">
+                        <span>Total price:</span>
+                        <span>{totalPrice} $</span>
                     </li>
-                )}
-                <li className="bucket__price">
-                    <span>Total price:</span>
-                    <span>{totalPrice} $</span>
-                </li>
-            </ul>
+                </ul>
+            </div>
         </div>
     );
 }
