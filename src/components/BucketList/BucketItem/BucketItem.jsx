@@ -1,12 +1,11 @@
-function BucketItem({
-    id,
-    name,
-    price,
-    quantity,
-    removeFromBucket,
-    addQuantity,
-    removeQuantity,
-}) {
+import { useContext } from 'react';
+import { ShopContext } from '../../../context';
+
+function BucketItem({ id, name, price, quantity }) {
+    const { removeFromBucket, addQuantity, removeQuantity } = useContext(
+        ShopContext
+    );
+
     return (
         <li className="bucket__item">
             <span>

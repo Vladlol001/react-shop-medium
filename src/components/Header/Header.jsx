@@ -1,7 +1,7 @@
 import sMod from './Header.module.css';
 import Bucket from '../common/Bucket';
 
-function Header({ bucket, handleBacketShow }) {
+function Header() {
     return (
         <header className="header">
             <div className="container">
@@ -10,10 +10,7 @@ function Header({ bucket, handleBacketShow }) {
                         <h3>Serching Films</h3>
                     </div>
                     <div className="header__nav">
-                        <Bucket
-                            handleBacketShow={handleBacketShow}
-                            bucket={bucket}
-                        />
+                        <Bucket />
                     </div>
                 </div>
             </div>

@@ -1,13 +1,10 @@
+import { useContext } from 'react';
+import { ShopContext } from '../../context';
 import BucketItem from './BucketItem/BucketItem';
 
-function BucketList({
-    bucket = [],
-    handleBacketShow,
-    removeFromBucket,
-    addQuantity,
-    removeQuantity,
-}) {
-    const totalPrice = bucket.reduce((sum, el) => {
+function BucketList() {
+    const { bucketItems = [], handleBacketShow } = useContext(ShopContext);
+    const totalPrice = bucketItems.reduce((sum, el) => {
         return sum + el.price * el.quantity;
     }, 0);
 
@@ -19,15 +16,9 @@ function BucketList({
                         <i className="fas fa-times"></i>
                     </div>
                     <li className="bucket__name">Bucket</li>
-                    {bucket.length ? (
-                        bucket.map((item) => (
-                            <BucketItem
-                                removeFromBucket={removeFromBucket}
-                                removeQuantity={removeQuantity}
-                                addQuantity={addQuantity}
-                                key={item.id}
-                                {...item}
-                            />
+                    {bucketItems.length ? (
+                        bucketItems.map((item) => (
+                            <BucketItem key={item.id} {...item} />
                         ))
                     ) : (
                         <li className="bucket__item">

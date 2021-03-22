@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+import { ShopContext } from '../../context';
 
-function Alert({ name, closeAlert }) {
+function Alert() {
+    const { alertName, closeAlert } = useContext(ShopContext);
     useEffect(() => {
         const timerId = setTimeout(closeAlert, 3000);
 
         return () => {
             clearTimeout(timerId);
         };
-    }, [name]);
+    }, [alertName]);
 
     return (
         <div className="alert__container">
-            <div className="alert">{name} add in the bucket</div>
+            <div className="alert">{alertName} add in the bucket</div>
         </div>
     );
 }

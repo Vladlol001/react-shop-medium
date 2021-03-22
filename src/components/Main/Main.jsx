@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { API_KEY, API_URL } from '../../config';
+import { ShopContext } from '../../context';
 import Preloader from '../common/Preloader';
 import GoodList from './GoodsList/GoodsList';
 
-function Main({ addToBucket, bucket }) {
-    const [goods, setGoods] = useState([]);
-    const [isLoading, setLoading] = useState(true);
+function Main() {
+    const { loading, setBucket } = useContext(ShopContext);
 
     useEffect(function getGoods() {
         fetch(API_URL, {
@@ -15,24 +15,19 @@ function Main({ addToBucket, bucket }) {
         })
             .then((response) => response.json())
             .then((data) => {
-                data && setGoods(data.shop);
-                setLoading(false);
+                setBucket(data.shop);
             })
             .catch((e) => console.log(e));
     }, []);
 
     return (
         <main className="main">
-            {isLoading ? (
+            {loading ? (
                 <Preloader />
             ) : (
                 <div className="main">
                     <div className="container">
-                        <GoodList
-                            bucket={bucket}
-                            goods={goods}
-                            addToBucket={addToBucket}
-                        />
+                        <GoodList />
                     </div>
                 </div>
             )}

@@ -1,4 +1,8 @@
-function GoodsItem({ goods, addToBucket, bucket = [] }) {
+import { useContext } from 'react';
+import { ShopContext } from '../../../../context';
+
+function GoodsItem({ goods }) {
+    const { addToBucket, bucket = [], bucketItems } = useContext(ShopContext);
     let goToTheBucket = 0;
     return (
         <div className="card">
@@ -26,9 +30,9 @@ function GoodsItem({ goods, addToBucket, bucket = [] }) {
                     }}
                     className="card__btn"
                 >
-                    {bucket.forEach((item) => {
+                    {bucketItems.forEach((item) => {
                         if (item.id === goods.mainId) {
-                            goToTheBucket++;
+                            goToTheBucket = 1;
                         }
                         return item;
                     })}
